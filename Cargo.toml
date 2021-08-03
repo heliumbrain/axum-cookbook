@@ -1,0 +1,11 @@
+[package]
+name = "axum-cookbook"
+version = "0.1.0"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+axum = "0.1"
+tokio = { version = "1.9.0", features = ["full"] }
+hyper = { version = "0.14", features = ["full"] }
