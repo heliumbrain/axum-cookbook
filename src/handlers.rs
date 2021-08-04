@@ -1,25 +1,18 @@
 //! src/handlers.rs
 
-use std::fmt::format;
-
 use axum::{
   extract::{Extension, Json},
   response::{self, IntoResponse},
 };
 use hyper::http::StatusCode;
 use sqlx::{
-  postgres::{PgPool, PgRow},
+  postgres::PgPool,
   query_as,
 };
 use uuid::Uuid;
 
 use crate::models;
 
-use models::RecipeIn;
-
-pub async fn index() -> response::Html<&'static str> {
-  response::Html("<h1>Hello, friend!</h1>")
-}
 
 pub async fn get_recipes(
   Extension(pool): Extension<PgPool>,

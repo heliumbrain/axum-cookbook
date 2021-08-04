@@ -12,24 +12,6 @@ pub struct Recipe {
   published: bool,
 }
 
-impl Recipe {
-  pub fn new(
-    id: uuid::Uuid,
-    title: String,
-    content: String,
-    author: User,
-    published: bool,
-  ) -> Self {
-    Self {
-      id,
-      title,
-      content,
-      author,
-      published,
-    }
-  }
-}
-
 #[derive(Debug, Serialize, Deserialize)]
 pub struct RecipeOut {
   id: uuid::Uuid,
@@ -59,12 +41,6 @@ pub struct RecipesInfo {
   pub title: String,
 }
 
-impl RecipesOut {
-  pub fn new(id: Uuid, title: String, author: UserOut) -> Self {
-    Self { id, title, author }
-  }
-}
-
 #[derive(Debug, Serialize, Deserialize)]
 pub struct User {
   id: uuid::Uuid,
@@ -84,8 +60,3 @@ pub struct UserOut {
   username: String,
 }
 
-impl UserOut {
-  pub fn new(id: uuid::Uuid, username: String) -> Self {
-    Self { id, username }
-  }
-}
