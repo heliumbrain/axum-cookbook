@@ -14,31 +14,29 @@ pub struct Recipe {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct RecipeOut {
-  id: uuid::Uuid,
-  title: String,
-  content: String,
-  author: User,
+  pub id: uuid::Uuid,
+  pub title: String,
+  pub content: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct RecipeIn {
   pub title: String,
   pub content: String,
-  //pub author: User,
   pub published: bool,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct RecipesOut {
-  id: Uuid,
-  title: String,
-  author: UserOut,
+  pub id: Uuid,
+  pub title: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct RecipesInfo {
-  pub id: Uuid,
+pub struct RecipeUpdate {
   pub title: String,
+  pub content: String,
+  pub published: bool
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -59,4 +57,3 @@ pub struct UserOut {
   id: uuid::Uuid,
   username: String,
 }
-

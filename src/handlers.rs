@@ -1,44 +1,51 @@
 //! src/handlers.rs
 
 use axum::{
-  extract::{Extension, Json},
+  extract::{Extension, Json, UrlParams},
   response::{self, IntoResponse},
 };
 use hyper::http::StatusCode;
-use sqlx::{
-  postgres::PgPool,
-  query_as,
-};
+use sqlx::{postgres::PgPool, query_as};
 use uuid::Uuid;
 
 use crate::models;
 
-
 pub async fn get_recipes(
   Extension(pool): Extension<PgPool>,
-) -> response::Json<models::RecipesInfo> {
+) -> response::Json<Vec<models::RecipesOut>> {
   let recipe = query_as!(
-    models::RecipesInfo,
+    models::RecipesOut,
     r#"
-SELECT id, title
-FROM recipes
-ORDER BY id
-limit 1
+    SELECT id, title
+    FROM recipes
+    ORDER BY title
     "#
   )
-  .fetch_one(&pool)
+  .fetch_all(&pool)
   .await
   .unwrap();
 
   response::Json(recipe)
 }
 
-pub async fn get_recipe(recipe: uuid::Uuid) -> response::Json<models::RecipeOut> {
-  todo!()
-}
+pub async fn get_recipe(
+  Extension(pool): Extension<PgPool>,
+  UrlParams((id,)): UrlParams<(Uuid,)>,
+) -> response::Json<models::RecipeOut> {
+  let recipe = query_as!(
+    models::RecipeOut,
+    r#"
+    SELECT id, title, content
+    FROM recipes
+    WHERE id = $1
+    "#,
+    id
+  )
+  .fetch_one(&pool)
+  .await
+  .unwrap();
 
-pub async fn delete_recipe(recipe: uuid::Uuid) -> response::Json<String> {
-  todo!()
+  response::Json(recipe)
 }
 
 pub async fn create_recipe(
@@ -65,7 +72,31 @@ pub async fn create_recipe(
 }
 
 pub async fn update_recipe(
-  recipe: models::Recipe,
-) -> response::Json<models::RecipeOut> {
+  Extension(pool): Extension<PgPool>,
+  Json(recipe): Json<models::RecipeUpdate>,
+) -> impl IntoResponse {
   todo!()
+}
+
+
+pub async fn delete_recipe(
+  Extension(pool): Extension<PgPool>,
+  UrlParams((id,)): UrlParams<(Uuid,)>,
+) -> impl IntoResponse {
+  sqlx::query!(
+    r#"
+    DELETE FROM recipes
+    WHERE id = $1
+    "#,
+    id
+  )
+  .execute(&pool)
+  .await
+  .expect("Failed to delete row from DB");
+
+  (
+    StatusCode::OK,
+    response::Json(format!("Deleted recipe with id: {}", id)),
+  )
+
 }

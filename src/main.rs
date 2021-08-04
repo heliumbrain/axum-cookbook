@@ -2,6 +2,7 @@
 
 use axum::{prelude::*, AddExtensionLayer};
 use dotenv;
+use handlers::{get_recipe, create_recipe, get_recipes, delete_recipe};
 use sqlx::postgres::PgPoolOptions;
 use std::{env, net::SocketAddr};
 mod handlers;
@@ -23,13 +24,10 @@ async fn main() {
   // build our application with a route
   let app = route(
     "/recipes",
-    get(handlers::get_recipes).post(handlers::create_recipe),
+    get(get_recipes).post(create_recipe),
   )
+  .route("/recipes/:id", get(get_recipe).delete(delete_recipe))
   .layer(AddExtensionLayer::new(pool));
-
-  //.post(handlers::create_recipe)
-  //.delete(handlers::delete_recipe)
-  //.patch(handlers::update_recipe),
 
   // run it
   let addr = SocketAddr::from(([127, 0, 0, 1], 3333));
