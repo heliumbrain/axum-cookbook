@@ -1,4 +1,7 @@
+//! src/models.rs
+
 use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Recipe {
@@ -7,6 +10,24 @@ pub struct Recipe {
   content: String,
   author: User,
   published: bool,
+}
+
+impl Recipe {
+  pub fn new(
+    id: uuid::Uuid,
+    title: String,
+    content: String,
+    author: User,
+    published: bool,
+  ) -> Self {
+    Self {
+      id,
+      title,
+      content,
+      author,
+      published,
+    }
+  }
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -19,34 +40,52 @@ pub struct RecipeOut {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct RecipeIn {
-  title: String,
-  content: String,
-  author: User,
-  published: bool,
+  pub title: String,
+  pub content: String,
+  //pub author: User,
+  pub published: bool,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct RecipesOut {
-  id: uuid::Uuid,
+  id: Uuid,
   title: String,
-  author: User,
+  author: UserOut,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-struct User {
+pub struct RecipesInfo {
+  pub id: Uuid,
+  pub title: String,
+}
+
+impl RecipesOut {
+  pub fn new(id: Uuid, title: String, author: UserOut) -> Self {
+    Self { id, title, author }
+  }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct User {
   id: uuid::Uuid,
   username: String,
   password: String,
 }
 
 #[derive(Serialize, Debug)]
-struct UserDbIn {
+pub struct UserDbIn {
   username: String,
   hashed_password: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct UserOut {
   id: uuid::Uuid,
   username: String,
+}
+
+impl UserOut {
+  pub fn new(id: uuid::Uuid, username: String) -> Self {
+    Self { id, username }
+  }
 }
