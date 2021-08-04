@@ -5,6 +5,7 @@ use axum::{
   response::{self, IntoResponse},
 };
 use hyper::http::StatusCode;
+use serde_json::json;
 use sqlx::{postgres::PgPool, query_as};
 use uuid::Uuid;
 
@@ -67,7 +68,7 @@ pub async fn create_recipe(
 
   (
     StatusCode::CREATED,
-    response::Json(format!("Created recipe with id: {}", recipe_id)),
+    response::Json(json!({ "recipe_id": recipe_id })),
   )
 }
 
@@ -96,7 +97,7 @@ pub async fn delete_recipe(
 
   (
     StatusCode::OK,
-    response::Json(format!("Deleted recipe with id: {}", id)),
+    response::Json(json!({ "recipe_id": id })),
   )
 
 }
