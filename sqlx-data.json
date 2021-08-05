@@ -1,7 +1,7 @@
 {
   "db": "PostgreSQL",
-  "34e56a06e4e4747db6a7820057a925665834a6396c1204362ed749732a0fd797": {
-    "query": "\nSELECT id, title\nFROM recipes\nORDER BY id\nlimit 1\n    ",
+  "0db5cbaa7a4dc83cae533c6452780557ad41374cf4044f8b127166defe275981": {
+    "query": "\n    SELECT id, title\n    FROM recipes\n    ORDER BY title\n    ",
     "describe": {
       "columns": [
         {
@@ -34,6 +34,50 @@
           "Text",
           "Text",
           "Bool"
+        ]
+      },
+      "nullable": []
+    }
+  },
+  "53f4991b0f1bdfffcb8384116caeb14491f80a5360ae92bf276265d0c6681884": {
+    "query": "\n    SELECT id, title, content\n    FROM recipes\n    WHERE id = $1\n    ",
+    "describe": {
+      "columns": [
+        {
+          "ordinal": 0,
+          "name": "id",
+          "type_info": "Uuid"
+        },
+        {
+          "ordinal": 1,
+          "name": "title",
+          "type_info": "Text"
+        },
+        {
+          "ordinal": 2,
+          "name": "content",
+          "type_info": "Text"
+        }
+      ],
+      "parameters": {
+        "Left": [
+          "Uuid"
+        ]
+      },
+      "nullable": [
+        false,
+        false,
+        false
+      ]
+    }
+  },
+  "f517a35941472d19390f3813e16a10334e6a63addbf0a6117bd285a9be0f03ce": {
+    "query": "\n    DELETE FROM recipes\n    WHERE id = $1\n    ",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Left": [
+          "Uuid"
         ]
       },
       "nullable": []
