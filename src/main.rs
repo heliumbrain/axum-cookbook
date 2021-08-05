@@ -14,7 +14,7 @@ async fn main() {
 
   //Create a connection pool for Postgres DB
   let pool = PgPoolOptions::new()
-    .max_connections(5)
+    .max_connections(20)
     .connect(
       &env::var("DATABASE_URL").expect("DATABASE_URL not found in env variables"),
     )
