@@ -146,33 +146,27 @@ pub async fn login_user(
   )
   .fetch_one(&pool)
   .await
-  .map(|r|{
-    r.password_hashed
-  })
+  .map(|r| r.password_hashed)
   .unwrap();
 
   let is_valid_password = verifier
     .with_hash(hash)
     .with_password(user.password)
-    .with_secret_key(&env::var("SECRET_KEY").expect("SECRET_KEY not found in env variables"))
+    .with_secret_key(
+      &env::var("SECRET_KEY").expect("SECRET_KEY not found in env variables"),
+    )
     .verify()
     .expect("Password is not valid");
 
-  match is_valid_password {
-    true => {
-      (
-        StatusCode::OK,
-        response::Json(json!({"Logged in": user.username})),
-      )
-    }
-
-    false => {
-      (
-        StatusCode::UNAUTHORIZED,
-        response::Json(json!({"Failed to login": user.username})),
-      )
-    }
-
+  if is_valid_password {
+    (
+      StatusCode::OK,
+      response::Json(json!({"Logged in": user.username})),
+    )
+  } else {
+    (
+      StatusCode::UNAUTHORIZED,
+      response::Json(json!({"Failed to login": user.username})),
+    )
   }
-
 }
