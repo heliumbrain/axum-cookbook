@@ -1,8 +1,8 @@
-# Axum for dummies
-
-#### Getting started
+# Axum cookbook
 
 ## About Axum
+
+
 
 `axum` is a new web application framework that (according to their repo) focuses on ergonomics and modularity.
 
@@ -69,7 +69,7 @@ After running the project with `cargo run` you should be able to visit [`http://
 
 ----
 
-#### CRUD Routes
+## CRUD Routes
 
 ```rust
 //! src/main.rs

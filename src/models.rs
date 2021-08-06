@@ -36,24 +36,24 @@ pub struct RecipesOut {
 pub struct RecipeUpdate {
   pub title: String,
   pub content: String,
-  pub published: bool
+  pub published: bool,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct User {
   id: uuid::Uuid,
-  username: String,
+  pub username: String,
   password: String,
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct UserDbIn {
-  username: String,
-  hashed_password: String,
+  pub username: String,
+  pub password: String,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct UserOut {
-  id: uuid::Uuid,
-  username: String,
+  pub id: uuid::Uuid,
+  pub username: String,
 }
