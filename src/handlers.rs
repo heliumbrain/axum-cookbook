@@ -8,6 +8,7 @@ use axum::{
   response::{self, IntoResponse},
 };
 use hyper::http::StatusCode;
+use serde::de::value::StringDeserializer;
 use serde_json::{json, to_string};
 use sqlx::{postgres::PgPool, query_as};
 use uuid::Uuid;
@@ -139,16 +140,19 @@ pub async fn login_user(
 ) -> impl IntoResponse {
   let mut verifier = Verifier::default();
 
-  let password_hashed  = sqlx::query!(
+  let hash: String = sqlx::query!(
     "SELECT password_hashed FROM users where username = $1",
     user.username,
   )
   .fetch_one(&pool)
   .await
-  .expect("User not found");
+  .map(|r|{
+    r.password_hashed
+  })
+  .unwrap();
 
   let is_valid_password = verifier
-    .with_hash(password_hashed)
+    .with_hash(hash)
     .with_password(user.password)
     .with_secret_key(&env::var("SECRET_KEY").expect("SECRET_KEY not found in env variables"))
     .verify()
